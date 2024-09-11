@@ -1,11 +1,28 @@
 <template>
-  <aside class="flex flex-col w-64 min-h-[100vh] overflow-hidden p-4 bg-dark-blue2 ease-out duration-200">
-    <!-- Navigation -->
-    <div class="navigation my-0 -mx-4 z-10">
-      <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/test' }]" to="/test">
-        <img src="../assets/logo-wallbot.png" alt="logo-wallbot" class="w-8 h-8 mt-4 mb-4" />
-        <span class="text" :class="{ 'text-purple': currentPage === '/test' }"></span>
-      </router-link>
+
+<div>
+    <!-- Bouton hamburger pour le mobile -->
+    <button
+      class="mobile-menu-button fixed top-4 left-4 z-30 bg-dark-blue2 text-white p-2 rounded-md lg:hidden"
+      @click="toggleMenu"
+    >
+      <!-- Icone du menu burger -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="#ffffff" d="M3 6h18v2H3zM3 12h18v2H3zM3 18h18v2H3z" />
+      </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <aside
+      :class="['sidebar', { 'open': isMenuOpen }]"
+      class="fixed top-0 left-0 w-64 min-h-[100vh] overflow-hidden p-4 bg-dark-blue2 ease-out duration-200 lg:relative lg:flex lg:flex-col lg:translate-x-0"
+    >
+      <!-- Navigation -->
+      <div class="navigation my-0 -mx-4 z-10">
+        <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/test' }]" to="/test">
+          <img src="../assets/logo-wallbot.png" alt="logo-wallbot" class="w-8 h-8 mt-4 mb-4" />
+          <span class="text" :class="{ 'text-purple': currentPage === '/test' }"></span>
+        </router-link>
       
       <!-- Vos autres liens de navigation -->
       <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/analysis' }]" to="/analysis">
@@ -30,7 +47,7 @@
   
         <router-link :class="['button', { 'text-purple bg-blue': currentPage === '/backOffice/documentation' }]" to="/backOffice/documentation">
             <svg xmlns="http://www.w3.org/2000/svg" :class="[iconClass, 'mt-4', 'mb-4']" width="32" height="32" viewBox="0 0 24 24"><path fill="#ffffff" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/></svg> 
-                     <span class="text" :class="{ 'text-purple': currentPage === '/backOffice/documentation' }">Rôles</span>
+                     <span class="text" :class="{ 'text-darkblue2': currentPage === '/backOffice/documentation' }">Rôles</span>
         </router-link>
   
         <router-link :class="['button', { 'text-purple bg-blue': currentPage === '/backOffice/structure' }]" to="/backOffice/structure">
@@ -49,6 +66,7 @@
 
   
     </aside>
+  </div>
   </template>
   
   
@@ -59,6 +77,7 @@
   
   const currentPage = ref('');
   const route = useRoute();
+  const isMenuOpen = ref(false); // Etat du menu
   
   watch(
     () => route.path,
@@ -68,13 +87,36 @@
   );
   
   currentPage.value = route.path;
+  
+  // Fonction pour ouvrir ou fermer le menu
+  const toggleMenu = () => {
+    isMenuOpen.value = !isMenuOpen.value;
+  };
   </script>
   
   <style scoped>
+  /* Styles pour le bouton du menu burger */
+  .mobile-menu-button {
+    display: block;
+    z-index: 30;
+  }
+  
+  /* Styles pour le menu burger (mode mobile) */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+    z-index: 20; /* S'assure que le menu est au-dessus du contenu */
+    width: 16rem; /* Largeur fixe pour le menu */
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
   .button .text {
     transition: opacity 0.3s ease-out;
-    overflow: hidden; 
-    white-space: nowrap; 
+    overflow: hidden;
+    white-space: nowrap;
     color: white;
   }
   
@@ -90,10 +132,24 @@
   .button:hover {
     background-color: #3B82F6;
   }
-
+  
+  /* Afficher le menu burger uniquement sur mobile */
+  @media (min-width: 1024px) {
+    .mobile-menu-button {
+      display: none;
+    }
+  
+    .sidebar {
+      transform: none;
+      position: relative;
+    }
+  
+    /* Ajoute une marge gauche au contenu principal quand la sidebar est visible */
+    .content {
+      margin-left: 16rem; /* Largeur de la sidebar */
+    }
+  }
   </style>
-  
-  
   
   <!-- Exportation du composant -->
   <script>
