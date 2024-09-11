@@ -72,7 +72,7 @@
               <h1 class="font-semibold text-xl">Classement</h1>
               <p class="text-light-grey">Le top des membres du classement</p>
             </div>
-            <div class="right-top bg-blue text-dark-blue font-semibold rounded-xl p-2 flex items-center align-center">
+            <div class="right-top bg-blue text-dark-blue font-semibold rounded-xl p-2 flex items-center align-center  transition-transform duration-300 hover:scale-105 cursor-pointer">
               <p class="">Voir toute la liste</p>
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M6 6v2h8.59L5 17.59L6.41 19L16 9.41V18h2V6z"/></svg>            </div>
           </div>
@@ -80,8 +80,8 @@
           <!-- En-tête du tableau de classement -->
           <div class="ranking-info flex justify-between items-center text-light-grey mb-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-4" width="24" height="24" viewBox="0 0 256 256"><path fill="currentColor" d="M216 96a88 88 0 1 0-144 67.83V240a8 8 0 0 0 11.58 7.16L128 225l44.43 22.21a8.1 8.1 0 0 0 3.57.79a8 8 0 0 0 8-8v-76.17A87.85 87.85 0 0 0 216 96M56 96a72 72 0 1 1 72 72a72.08 72.08 0 0 1-72-72m112 131.06l-36.43-18.21a8 8 0 0 0-7.16 0L88 227.06v-52.69a87.89 87.89 0 0 0 80 0ZM128 152a56 56 0 1 0-56-56a56.06 56.06 0 0 0 56 56m0-96a40 40 0 1 1-40 40a40 40 0 0 1 40-40"/></svg>
-            <p class="flex-1">Membre</p>
-            <p class="w-32 text-center">Rôle</p>
+            <p class="flex-1 font-semibold">Membre</p>
+            <p class="w-32 text-center font-semibold">Rôle</p>
             <svg xmlns="http://www.w3.org/2000/svg" class="w-24 text-right" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2 22V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18H6zm4-8h8v-2H6zm0-3h12V9H6zm0-3h12V6H6z"/></svg>
             <svg xmlns="http://www.w3.org/2000/svg" class="w-24 text-right" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="m12 8l3 5.2l3-2.7l-.7 3.5H6.7L6 10.5l3 2.7zm0-4l-3.5 6L3 5l2 11h14l2-11l-5.5 5zm7 14H5v1c0 .6.4 1 1 1h12c.6 0 1-.4 1-1z"/></svg>
           </div>
@@ -109,7 +109,7 @@
             </div>
             <!-- Rôle -->
             <div class="w-48 text-center">
-  <span class="text-sm text-white bg-blue px-3 py-1 rounded-xl">
+  <span class="text-sm text-dark-blue font-semibold bg-blue px-3 py-1 rounded-xl">
     {{ member.role }}
   </span>
 </div>
