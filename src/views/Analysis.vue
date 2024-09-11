@@ -18,7 +18,7 @@
     <!-- Statistic Leave -->
 <div class="statistic-leave flex gap-10 border border-light-grey rounded-xl p-4">
   <div class="content">
-  <h2>Nombre d'arrivées</h2>
+  <h2>Nombre de départs</h2>
   <p class="text-light-grey"><span class="text-2xl font-bold text-white mr-2">100</span>+10% depuis le mois dernier</p>
 </div>
 <div class="icon flex flex-col items-center align-center rounded-xl p-4 bg-blue">
@@ -28,7 +28,7 @@
     <!-- Statistic Messages sended -->
 <div class="statistic-message flex gap-10 border border-light-grey rounded-xl p-4">
   <div class="content">
-  <h2>Nombre d'arrivées</h2>
+  <h2>Nombre de messages</h2>
   <p class="text-light-grey"><span class="text-2xl font-bold text-white mr-2">100</span>+10% depuis le mois dernier</p>
 </div>
 <div class="icon flex flex-col items-center align-center rounded-xl p-4 bg-blue">
@@ -38,7 +38,7 @@
     <!-- Statistic Interaction -->
 <div class="statistic-interaction flex gap-10 border border-light-grey rounded-xl p-4">
   <div class="content">
-  <h2>Nombre d'arrivées</h2>
+  <h2>Nombre d'intéractions</h2>
   <p class="text-light-grey"><span class="text-2xl font-bold text-white mr-2">100</span>+10% depuis le mois dernier</p>
 </div>
 <div class="icon flex flex-col items-center align-center rounded-xl p-4 bg-blue">
@@ -50,10 +50,10 @@
     <!-- Conteneur inférieur -->
     <div class="bottom-container">
       <div class="flex gap-10">
-        <div class="member-flow flex flex-1 border border-light-grey rounded-xl p-4">
-          <div class="member-flow-left w-full h-full">
+        <div class="member-flow flex-1 border border-light-grey rounded-xl p-4">
+          <div class="member-flow-left">
             <h1 class="font-semibold text-xl">Flux de membres</h1>
-            <p class="text-light-grey">Affiche le nombre de membres ayant rejoint / quitter le serveur</p>
+            <p class="text-light-grey">Affiche le nombre de membres ayant rejoint / quitté le serveur</p>
             <!-- Menu déroulant pour sélectionner la période -->
             <select v-model="selectedPeriod" class="mt-4 p-2 border border-light-grey rounded bg-dark-blue">
               <option value="7">Derniers 7 jours</option>
@@ -61,14 +61,46 @@
               <option value="90">Derniers 90 jours</option>
             </select>
             <!-- Canvas pour le graphique -->
-            <canvas id="memberChart" class="mt-4 w-full h-full"></canvas>
+            <canvas id="memberChart" class="mt-4"></canvas>
           </div>
 
         </div>
 
-        <div class="ranking flex-1 border border-light-grey rounded-xl p-4">
+<!-- Div pour le classement -->
+<div class="ranking flex-1 border border-light-grey rounded-xl p-4">
+  <div class="top-content flex justify-between items-center mb-8">
+    <div class="left-top">
           <h1 class="font-semibold text-xl">Classement</h1>
           <p class="text-light-grey">Le top des membres du classement</p>
+        </div>
+        <div class="right-top">
+          <p class="bg-blue rounded-xl p-2">Voir toute la liste</p>
+        </div>
+        </div>
+          <!-- Liste des membres -->
+          <div v-for="(member, index) in members" :key="index" class="member flex items-center my-2">
+            <!-- Position -->
+            <div class="w-6 text-center">{{ index + 1 }}</div>
+            <!-- Photo de profil et pseudo -->
+            <img :src="member.avatar" alt="PP" class="w-10 h-10 rounded-full mx-2" />
+            <div class="flex-1">
+              <div class="flex justify-between items-center">
+                <span class="font-semibold text-white">{{ member.username }}</span>
+                <span class="text-light-grey text-sm">{{ member.role }}</span>
+              </div>
+              <!-- Barre de progression -->
+              <div class="w-full bg-gray-300 rounded-full h-2.5">
+                <div
+                  class="bg-blue h-2.5 rounded-full"
+                  :style="{ width: member.progress + '%' }"
+                ></div>
+              </div>
+            </div>
+            <!-- Nombre de messages -->
+            <div class="w-16 text-right text-light-grey">{{ member.messages }} msgs</div>
+            <!-- Nombre de points -->
+            <div class="w-16 text-right text-light-grey">{{ member.points }} pts</div>
+          </div>
         </div>
       </div>
     </div>
@@ -80,10 +112,39 @@ import { Chart } from 'chart.js/auto';
 
 export default {
   setup() {
+        // Exemple de données de classement
+        const members = ref([
+      {
+        username: 'Alice',
+        avatar: 'https://via.placeholder.com/40',
+        role: 'Admin',
+        progress: 70,
+        messages: 120,
+        points: 3000,
+      },
+      {
+        username: 'Bob',
+        avatar: 'https://via.placeholder.com/40',
+        role: 'Member',
+        progress: 50,
+        messages: 80,
+        points: 2000,
+      },
+      {
+        username: 'Charlie',
+        avatar: 'https://via.placeholder.com/40',
+        role: 'Member',
+        progress: 30,
+        messages: 40,
+        points: 1000,
+      },
+      // Ajoutez plus de membres ici
+    ]);
+
+
     const selectedPeriod = ref('7');
     const memberChart = ref(null);
 
-    // Fonction pour mettre à jour le graphique en fonction de la période sélectionnée
     const updateChart = () => {
       const data = getDataForPeriod(selectedPeriod.value);
 
@@ -95,7 +156,6 @@ export default {
       }
     };
 
-    // Fonction pour obtenir les données pour la période sélectionnée
     const getDataForPeriod = (period) => {
       const labels = Array.from({ length: period }, (_, i) => `Jour ${i + 1}`);
       const arrivals = Array.from({ length: period }, () => Math.floor(Math.random() * 10));
@@ -143,6 +203,29 @@ export default {
         },
         options: {
           responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              labels: {
+                font: {
+                  size: 14, // Augmente la taille de la police pour la légende
+                },
+                usePointStyle: true, // Utilise le style de point pour la légende
+                padding: 20, // Ajoute de l'espace autour de la légende
+              },
+              onHover: function (event, legendItem) {
+                document.getElementById('memberChart').style.cursor = 'pointer'; // Change le curseur au survol
+              },
+              onLeave: function () {
+                document.getElementById('memberChart').style.cursor = 'default'; // Réinitialise le curseur
+              },
+            },
+            tooltip: {
+              enabled: true,
+              mode: 'index',
+              intersect: false,
+            },
+          },
           scales: {
             x: { display: true, title: { display: true, text: 'Jour' } },
             y: { display: true, title: { display: true, text: 'Nombre' } },
@@ -155,6 +238,7 @@ export default {
 
     return {
       selectedPeriod,
+    members,
     };
   },
 };
