@@ -49,20 +49,21 @@
 
     <!-- Conteneur inférieur -->
     <div class="bottom-container">
-      <div class="member-flow flex gap-10">
-        <div class="flex-1 border border-light-grey rounded-xl p-4">
-          <h1 class="font-semibold text-xl">Flux de membres</h1>
-          <p class="text-light-grey">Affiche le nombre de membres ayant rejoint / quitter le serveur</p>
+      <div class="flex gap-10">
+        <div class="member-flow flex flex-1 border border-light-grey rounded-xl p-4">
+          <div class="member-flow-left w-full h-full">
+            <h1 class="font-semibold text-xl">Flux de membres</h1>
+            <p class="text-light-grey">Affiche le nombre de membres ayant rejoint / quitter le serveur</p>
+            <!-- Menu déroulant pour sélectionner la période -->
+            <select v-model="selectedPeriod" class="mt-4 p-2 border border-light-grey rounded bg-dark-blue">
+              <option value="7">Derniers 7 jours</option>
+              <option value="30">Derniers 30 jours</option>
+              <option value="90">Derniers 90 jours</option>
+            </select>
+            <!-- Canvas pour le graphique -->
+            <canvas id="memberChart" class="mt-4 w-full h-full"></canvas>
+          </div>
 
-          <!-- Menu déroulant pour sélectionner la période -->
-          <select v-model="selectedPeriod" class="mt-4 p-2 border border-light-grey rounded bg-dark-blue">
-            <option value="7">Derniers 7 jours</option>
-            <option value="30">Derniers 30 jours</option>
-            <option value="90">Derniers 90 jours</option>
-          </select>
-
-          <!-- Canvas pour le graphique -->
-          <canvas id="memberChart" class="mt-4"></canvas>
         </div>
 
         <div class="ranking flex-1 border border-light-grey rounded-xl p-4">
@@ -73,10 +74,9 @@
     </div>
   </div>
 </template>
-
 <script>
 import { ref, onMounted, watch } from 'vue';
-import { Chart } from 'chart.js/auto'; // Utilisation de 'chart.js/auto' pour charger automatiquement tous les composants nécessaires
+import { Chart } from 'chart.js/auto';
 
 export default {
   setup() {
@@ -87,7 +87,6 @@ export default {
     const updateChart = () => {
       const data = getDataForPeriod(selectedPeriod.value);
 
-      // Vérifiez si le graphique existe avant de le mettre à jour
       if (memberChart.value) {
         memberChart.value.data.labels = data.labels;
         memberChart.value.data.datasets[0].data = data.arrivals;
@@ -105,8 +104,17 @@ export default {
     };
 
     onMounted(() => {
-      // Crée le graphique lorsque le composant est monté
       const ctx = document.getElementById('memberChart').getContext('2d');
+
+      // Crée des dégradés pour chaque courbe
+      const gradient1 = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient1.addColorStop(1, 'rgba(66, 135, 245, 0)'); // Couleur plus claire en haut
+      gradient1.addColorStop(0, 'rgba(66, 135, 245, 0.4)'); // Transparente en bas
+
+      const gradient2 = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient2.addColorStop(1, 'rgba(66, 66, 245, 0)'); // Couleur plus sombre en haut
+      gradient2.addColorStop(0, 'rgba(66, 66, 245, 0.4)'); // Transparente en bas
+
       const initialData = getDataForPeriod(selectedPeriod.value);
       memberChart.value = new Chart(ctx, {
         type: 'line',
@@ -116,16 +124,20 @@ export default {
             {
               label: 'Arrivées',
               data: initialData.arrivals,
-              borderColor: 'rgba(75, 192, 192, 1)',
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(66, 135, 245, 1)', // Bleu clair
+              backgroundColor: gradient1,
               borderWidth: 2,
+              tension: 0.4, // Arrondir la courbe
+              fill: true, // Remplir sous la courbe
             },
             {
               label: 'Départs',
               data: initialData.leaves,
-              borderColor: 'rgba(255, 99, 132, 1)',
-              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(66, 66, 245, 1)', // Bleu plus foncé
+              backgroundColor: gradient2,
               borderWidth: 2,
+              tension: 0.4, // Arrondir la courbe
+              fill: true, // Remplir sous la courbe
             },
           ],
         },
@@ -139,7 +151,6 @@ export default {
       });
     });
 
-    // Watch pour détecter les changements de période et mettre à jour le graphique
     watch(selectedPeriod, updateChart);
 
     return {
@@ -150,5 +161,4 @@ export default {
 </script>
 
 <style scoped>
-/* Ajoutez vos styles personnalisés ici */
 </style>
