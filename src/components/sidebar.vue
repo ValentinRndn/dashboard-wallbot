@@ -1,15 +1,17 @@
 <template>
-    <aside :class="{ 'is-expanded': is_expanded }" class="flex flex-col w-[calc(2rem+32px)] min-h-[100vh] overflow-hidden p-4 bg-grey ease-out duration-200">
-    
-      <div class="navigation my-0 -mx-4 z-10">
-        <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/backOffice/dashboard' }]" to="/backOffice/dashboard">
-            <img src="../assets/logo-wallbot.png" :class="[iconClass]" alt="logo-wallbot" class="">
-            <span class="text" :class="{ 'text-purple': currentPage === '/backOffice/dashboard' }"></span>
-        </router-link>
-        <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/backOffice/dashboard' }]" to="/backOffice/dashboard">
-            <svg xmlns="http://www.w3.org/2000/svg" :class="[iconClass, 'mt-4', 'mb-4']" width="32" height="32" viewBox="0 0 24 24"><path fill="#ffffff" d="M5 20v-9.15L2.2 13L1 11.4L12 3l4 3.05V4h3v4.35l4 3.05l-1.2 1.6l-2.8-2.15V20h-5v-6h-4v6zm5-9.975h4q0-.8-.6-1.313T12 8.2t-1.4.513t-.6 1.312"/></svg>
-          <span class="text" :class="{ 'text-purple': currentPage === '/backOffice/dashboard' }">Tableau de bord</span>
-        </router-link>
+  <aside class="flex flex-col w-64 min-h-[100vh] overflow-hidden p-4 bg-dark-blue2 ease-out duration-200">
+    <!-- Navigation -->
+    <div class="navigation my-0 -mx-4 z-10">
+      <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/analysis' }]" to="/analysis">
+        <img src="../assets/logo-wallbot.png" alt="logo-wallbot" class="w-8 h-8 mt-4 mb-4" />
+        <span class="text" :class="{ 'text-purple': currentPage === '/analysis' }"></span>
+      </router-link>
+      
+      <!-- Vos autres liens de navigation -->
+      <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/backOffice/dashboard' }]" to="/backOffice/dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mt-4 mb-4" viewBox="0 0 24 24"><path fill="#ffffff" d="M5 20v-9.15L2.2 13L1 11.4L12 3l4 3.05V4h3v4.35l4 3.05l-1.2 1.6l-2.8-2.15V20h-5v-6h-4v6zm5-9.975h4q0-.8-.6-1.313T12 8.2t-1.4.513t-.6 1.312"/></svg>
+        <span class="text" :class="{ 'text-white': currentPage === '/backOffice/dashboard' }">Tableau de bord</span>
+      </router-link>
   
         <router-link :class="['button', { 'text-purple bg-blue': currentPage === '/backOffice/blog' }]" to="/backOffice/blog">
             <svg xmlns="http://www.w3.org/2000/svg"  :class="[iconClass, 'mt-4', 'mb-4']" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-miterlimit="5.759" d="M3 3v16a2 2 0 0 0 2 2h16"/><path stroke-miterlimit="5.759" d="m7 14l4-4l4 4l6-6"/><path d="M18 8h3v3"/></g></svg>
@@ -44,14 +46,7 @@
                 <span class="text" :class="{ 'text-purple': currentPage === '/backOffice/rer' }">Déconnexion</span>
       </router-link>
     </div> 
-  
-      <div class="menu-toggle-wrap flex justify-end items-end relative top-0 ease-out duration-200 mt-4 mb-4">
-        <button class="menu-toggle" @click="ToggleMenu">
-          <span class="material-icons">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M6.41 6L5 7.41L9.58 12L5 16.59L6.41 18l6-6z"/><path fill="currentColor" d="m13 6l-1.41 1.41L16.17 12l-4.58 4.59L13 18l6-6z"/></svg>
-          </span>
-        </button>
-      </div>
+
   
     </aside>
   </template>
@@ -59,40 +54,28 @@
   
   
   <script setup>
-import { ref, watch, computed } from 'vue';
-import { useRoute } from 'vue-router';
+  import { ref, watch } from 'vue';
+  import { useRoute } from 'vue-router';
   
-  const is_expanded = ref(false);
-  const ToggleMenu = () => {
-    is_expanded.value = !is_expanded.value;
-  };
-  
-  const currentPage = ref(''); // Initialisez currentPage avec une référence
-  
-  const route = useRoute(); // Obtenez la route actuelle avec useRoute
+  const currentPage = ref('');
+  const route = useRoute();
   
   watch(
-    () => route.path, // Surveillez la propriété path de l'objet route
+    () => route.path,
     (newPath) => {
-      currentPage.value = newPath; // Met à jour currentPage avec le chemin de la route actuelle
+      currentPage.value = newPath;
     }
   );
   
-  // Mettez à jour currentPage lorsque le composant est monté
   currentPage.value = route.path;
-
-  const iconClass = computed(() => is_expanded.value ? 'w-6 h-6 min-w-[24px] min-h-[24px]' : 'w-8 h-8 min-w-[32px] min-h-[32px]');
-const toggleIconClass = computed(() => is_expanded.value ? 'w-6 h-6 transform rotate-180' : 'w-8 h-8');
-
   </script>
-  
   
   <style scoped>
   .button .text {
-    opacity: 0;
     transition: opacity 0.3s ease-out;
     overflow: hidden; 
     white-space: nowrap; 
+    color: white;
   }
   
   .button {
@@ -100,71 +83,15 @@ const toggleIconClass = computed(() => is_expanded.value ? 'w-6 h-6 transform ro
     align-items: center;
     text-decoration: none;
     padding: 0 1rem;
-    transition: background-color 0.2s ease-out, width 0.2s ease-out;
+    transition: background-color 0.2s ease-out;
     gap: 10px;
   }
   
   .button:hover {
     background-color: #58B9EA;
   }
-  
-  .menu .button {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.2s ease-out;
-  }
-  
-  .menu .button .material-icons {
-    font-size: 2rem;
-    color: #fff;
-    transition: color 0.2s ease-out;
-  }
-  
-  .menu .button .text {
-    color: #fff;
-    transition: color 0.2s ease-out;
-  }
-  
-  .is-expanded {
-    width: 250px;
-  }
-  
-  .navigation .is_expanded {
-    top: -4rem;
-  }
-  
-  .is-expanded .menu-toggle-wrap .menu-toggle {
-    transform: rotate(180deg);
-  }
-  
-  .is-expanded .button .text {
-    opacity: 1;
-    color: #fff;
-  }
-  
-  .menu-toggle-wrap .menu-toggle {
-    transition: transform 0.2s ease-out;
-  }
-  
-  .menu-toggle-wrap .menu-toggle .material-icons {
-    font-size: 2rem;
-    color: #fff;
-    transition: color 0.2s ease-out;
-  }
-  
-  .menu-toggle-wrap .menu-toggle:hover .material-icons {
-    color: #58B9EA;
-    transform: translateX(0.5rem);
-  }
-  
-  .menu-toggle-wrap .menu-toggle .material-icons .menu-toggle {
-    transform: rotate(-180deg);
-  }
-  
+
   </style>
-  
   
   
   

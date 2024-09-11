@@ -7,19 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        'purple': '#7C70B0',
+        'blue': '#3B82F6',
         'grey': '#3E3E3E',
-        'login-input': '#BDBDBD',
-        'login-text': '#616161',
-        'purple-fonce': '#443972',
-        'login-grey': "#424242",
-        'back-grey': '#E4E4E4',
         'light-grey': '#999999',
-        'light-beige': '#F4F0EC',
-        'program-grey': '#4D5053',
-        'contact-grey': '#333333',
-        'post-grey': '#292F36',
-        'yellow': '#FFF000',
+        'dark-blue': '#020817',
+        'dark-blue2': '#00050c',
+
       },
       fontFamily: {
         // 'cgothic': ['c-gothic', 'sans-serif'],
