@@ -15,24 +15,24 @@
     <!-- Sidebar -->
     <aside
       :class="['sidebar', { 'open': isMenuOpen }]"
-      class="fixed top-0 left-0 w-64 min-h-[100vh] overflow-hidden p-4 bg-dark-blue2 ease-out duration-200 lg:relative lg:flex lg:flex-col lg:translate-x-0"
+      class="fixed top-0 left-0 min-h-[100vh] overflow-hidden p-4 bg-dark-blue2 ease-out duration-200 lg:relative lg:flex lg:flex-col lg:translate-x-0"
     >
       <!-- Navigation -->
       <div class="navigation my-0 -mx-4 z-10">
         <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/test' }]" to="/test">
           <img src="../assets/logo-wallbot.png" alt="logo-wallbot" class="w-8 h-8 mt-4 mb-4" />
-          <span class="text" :class="{ 'text-purple': currentPage === '/test' }"></span>
+          <span class="text text-xl font-bold" :class="{ 'text-white': currentPage === '/test' }">WallBot</span>
         </router-link>
-      
+
       <!-- Vos autres liens de navigation -->
       <router-link :class="['button', { 'text-blue bg-blue': currentPage === '/analysis' }]" to="/analysis">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mt-4 mb-4" viewBox="0 0 24 24"><path fill="#ffffff" d="M5 20v-9.15L2.2 13L1 11.4L12 3l4 3.05V4h3v4.35l4 3.05l-1.2 1.6l-2.8-2.15V20h-5v-6h-4v6zm5-9.975h4q0-.8-.6-1.313T12 8.2t-1.4.513t-.6 1.312"/></svg>
         <span class="text" :class="{ 'text-white': currentPage === '/analysis' }">Tableau de bord</span>
       </router-link>
   
-        <router-link :class="['button', { 'text-purple bg-blue': currentPage === '/backOffice/blog' }]" to="/backOffice/blog">
+        <router-link :class="['button', { 'text-purple bg-blue': currentPage === '/preview' }]" to="/preview">
             <svg xmlns="http://www.w3.org/2000/svg"  :class="[iconClass, 'mt-4', 'mb-4']" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-miterlimit="5.759" d="M3 3v16a2 2 0 0 0 2 2h16"/><path stroke-miterlimit="5.759" d="m7 14l4-4l4 4l6-6"/><path d="M18 8h3v3"/></g></svg>
-                      <span class="text" :class="{ 'text-purple': currentPage === '/backOffice/blog' }">Prévisualisation</span>
+                      <span class="text" :class="{ 'text-purple': currentPage === '/preview' }">Prévisualisation</span>
         </router-link>
   
         <router-link :class="['button', { 'text-purple bg-blue': currentPage === '/backOffice/landing' }]" to="/backOffice/landing">
@@ -153,9 +153,7 @@
   
   <!-- Exportation du composant -->
   <script>
-  
   export default {
     name: 'sidebar',
   }
-  
   </script>

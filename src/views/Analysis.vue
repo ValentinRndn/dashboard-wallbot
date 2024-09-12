@@ -2,10 +2,10 @@
   <div class="analysis ">
 
     <!-- Statistics container -->
-<div class="statistics-container flex justify-between my-10">
+<div class="statistics-container flex flex-wrap row-wrap justify-between my-10">
   
     <!-- Statistic Arrival -->
-<div class="statistic-arrival flex gap-10 border border-slate-800 rounded-xl p-4">
+<div class="statistic-arrival flex gap-10 border border-slate-800 rounded-xl p-4 md:gap-0">
   <div class="content">
   <h2>Nombre d'arrivées</h2>
   <p class="text-light-grey"><span class="text-2xl font-bold text-white mr-2">100</span>+10% depuis le mois dernier</p>
@@ -48,7 +48,7 @@
 
 
     <!-- Conteneur inférieur -->
-    <div class="bottom-container">
+    <div class="bottom-container flex-wrap">
       <div class="flex gap-10">
         <div class="member-flow flex-1 border border-slate-800 rounded-xl p-4">
           <div class="member-flow-left">
