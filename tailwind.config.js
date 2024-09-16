@@ -13,6 +13,7 @@ export default {
         'dark-blue': '#020817',
         'dark-blue2': '#00050c',
         'dark-progress': '#0E2043',
+        'red': '#ff6262',
 
       },
       fontFamily: {

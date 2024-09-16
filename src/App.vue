@@ -1,10 +1,15 @@
 <template>
   <div class="flex min-h-screen">
-    <!-- Sidebar Component -->
-    <sidebar />
-
-    <!-- Main Content Area -->
-    <div class="flex-1 p-4 bg-dark-blue text-white">
+    <!-- Barre latérale gauche -->
+    <div class="flex-shrink-0 w-64 md:w-1/5 lg:w-1/6 bg-gray-800 text-white">
+      <!-- ServerBar Component -->
+      <serverBar />
+      <!-- Sidebar Component -->
+      <sidebar />
+    </div>
+    
+      <!-- Contenu principal -->
+      <div class="flex-1 p-4 bg-dark-blue text-white ml-[85px] lg:ml-[16rem]">
       <!-- Contenu de la vue actuelle -->
       <router-view />
     </div>
@@ -12,9 +17,10 @@
 </template>
 
 <style>
-
+/* Ajoutez des styles personnalisés ici si nécessaire */
 </style>
 
-<script setup> 
+<script setup>
 import sidebar from './components/sidebar.vue';
+import serverBar from './components/serverBar.vue';
 </script>

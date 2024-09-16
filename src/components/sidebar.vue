@@ -1,21 +1,31 @@
 <template>
-
+  <div class="sidebar-container">
+    <div class="server-container fixed top-0 left-0 bg-dark-blue2 min-h-[100vh] overflow-hidden p-4 z-50 flex flex-col items-center gap-3 border-r border-r-slate-800">
+      <router-link to=''>
+        <div class="server w-14 h-14 rounded-full bg-slate-400"></div>
+      </router-link>
+      <router-link to=''>
+        <div class="server w-14 h-14 rounded-full bg-slate-400"></div>
+      </router-link>
+      <router-link to=''>
+        <div class="server w-14 h-14 rounded-full bg-slate-400"></div>
+      </router-link>
+    </div>
 <div>
     <!-- Bouton hamburger pour le mobile -->
     <button
-      class="mobile-menu-button fixed top-4 left-4 z-30 bg-dark-blue2 text-white p-2 rounded-md lg:hidden"
+      class="mobile-menu-button fixed top-4 left-20 z-30 bg-dark-blue2 text-white p-2 rounded-md lg:hidden"
       @click="toggleMenu"
     >
-      <!-- Icone du menu burger -->
+      <!-- Icône du menu burger -->
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="#ffffff" d="M3 6h18v2H3zM3 12h18v2H3zM3 18h18v2H3z" />
       </svg>
     </button>
 
-    <!-- Sidebar -->
     <aside
       :class="['sidebar', { 'open': isMenuOpen }]"
-      class="fixed top-0 left-0 min-h-[100vh] overflow-hidden p-4 bg-dark-blue2 ease-out duration-200 lg:relative lg:flex lg:flex-col lg:translate-x-0"
+      class="fixed top-0 left-[85px] min-h-[100vh] overflow-hidden p-4 bg-dark-blue2 ease-out duration-200 lg:relative lg:flex lg:flex-col lg:translate-x-0 lg:min-w-[16rem]"
     >
       <!-- Navigation -->
       <div class="navigation my-0 -mx-4 z-10">
@@ -67,6 +77,9 @@
   
     </aside>
   </div>
+
+
+  </div>
   </template>
   
   
@@ -93,7 +106,6 @@
     isMenuOpen.value = !isMenuOpen.value;
   };
   </script>
-  
   <style scoped>
   /* Styles pour le bouton du menu burger */
   .mobile-menu-button {
@@ -105,8 +117,8 @@
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease-out;
-    z-index: 20; /* S'assure que le menu est au-dessus du contenu */
-    width: 16rem; /* Largeur fixe pour le menu */
+    z-index: 20;
+    width: 16rem;
   }
   
   .sidebar.open {
@@ -146,7 +158,7 @@
   
     /* Ajoute une marge gauche au contenu principal quand la sidebar est visible */
     .content {
-      margin-left: 16rem; /* Largeur de la sidebar */
+      margin-left: 16rem;
     }
   }
   </style>

@@ -1,11 +1,51 @@
 <template>
     <div class="preview flex flex-col gap-5">
-  
-      <!-- Bouton Toggle pour la configuration des messages de bienvenue -->
-      <div class="welcomeMessage border border-slate-800 rounded-xl">
+      <div class="previsualisation-desc">
+        <h1 class="text-2xl font-semibold">Système de prévisualisation</h1>
+        <p class="text-light-grey ">Mets en place un captcha, envoie automatiquement des messages à tes nouveaux membres, attribue leur des rôles et fais leur des message d'adieu.</p>
+      </div>     
+            <!-- Bouton Toggle pour le captcha-->
+            <div class="welcomeMessage border border-slate-800 rounded-xl bg-dark-blue2">
         <div class="welcomeMessageTitle flex w-full justify-between items-center p-4">
-          <h1 class="text-xl font-semibold">Envoyer un message de bienvenue aux nouveaux utilisateurs</h1>
+          <h2 class="text-lg font-semibold">Utiliser un captcha pour vérifier que les nouveaux membres sont des humains</h2>
   
+          <!-- Bouton toggle personnalisé -->
+          <input
+            id="cb-captcha"
+            type="checkbox"
+            class="hide-me"
+            aria-labelledby="cb-label"
+            @change="toggleCaptcha"
+            :checked="isCaptchaOpen"
+          >
+          <label for="cb-captcha" class="toggle"></label>
+        </div>
+  
+        <!-- Section de configuration des messages de bienvenue -->
+        <div v-if="isCaptchaOpen" class="welcome-config p-4">
+          <div class="flex flex-col gap-4">
+            <textarea
+              id="welcome-message"
+              v-model="CaptchaConfig"
+              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
+              rows="4"
+              placeholder="Entrez votre message de bienvenue ici..."
+            ></textarea>
+  
+          </div>
+        </div>
+      </div>
+  
+
+<!---------------------------------------------------------------------------------------------- -->
+
+      <!-- Bouton Toggle pour la configuration des messages de bienvenue -->
+      <div class="welcomeMessage border border-slate-800 rounded-xl bg-dark-blue2">
+        <div class="welcomeMessageTitle flex w-full justify-between items-center p-4">
+          <h2 class="text-lg font-semibold">Envoyer un message de bienvenue aux nouveaux utilisateurs</h2>
+  
+
+
           <!-- Bouton toggle personnalisé -->
           <input
             id="cb-toggle-welcome"
@@ -19,23 +59,46 @@
   
         <!-- Section de configuration des messages de bienvenue -->
         <div v-if="isWelcomeConfigOpen" class="welcome-config p-4">
+
+          <h3 class="text-light-grey">Salon des Messages de Bienvenue <span class="text-red">*</span> </h3>
+          <select class=" rounded-md border bg-dark-blue2 border-slate-800 mb-4  mt-2 pl-3 py-2 pr-24">
+            <option value="general">Général</option>
+            <option value="welcome">Bienvenue</option>
+            <option value="rules">Règles</option>
+        </select>
+
+
+          <div class="border-b border-slate-800 mb-4"></div>
+
+
           <div class="flex flex-col gap-4">
             <textarea
               id="welcome-message"
               v-model="welcomeMessage"
-              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
+              class="p-2 rounded-md border bg-dark-blue2 border-slate-800 w-1/3 mb-4"
               rows="4"
               placeholder="Entrez votre message de bienvenue ici..."
             ></textarea>
           </div>
+          <div class="border-b border-slate-800 mb-4"></div>
+
+          <!-- Rôle d'arrivée -->
+          <h3 class="text-light-grey">Rôle d'arrivée <span class="text-red">*</span> </h3>
+          <select class=" rounded-md border bg-dark-blue2 border-slate-800 mb-4  mt-2 pl-3 py-2 pr-24">
+            <option value="general">Admin</option>
+            <option value="welcome">Modo</option>
+            <option value="rules">Membre</option>
+        </select>
         </div>
+
+        
       </div>
   
 <!---------------------------------------------------------------------------------------------- -->
       <!-- Bouton Toggle pour la configuration des messages privés des nouveaux membres -->
-      <div class="welcomeMessage border border-slate-800 rounded-xl">
+      <div class="welcomeMessage border border-slate-800 rounded-xl bg-dark-blue2">
         <div class="welcomeMessageTitle flex w-full justify-between items-center p-4">
-          <h1 class="text-xl font-semibold">Envoyer un message privé aux nouveaux membres</h1>
+          <h2 class="text-lg font-semibold">Envoyer un message privé aux nouveaux utilisateurs</h2>
   
           <!-- Bouton toggle personnalisé -->
           <input
@@ -52,21 +115,21 @@
         <div v-if="isPrivateMessageConfigOpen" class="welcome-config p-4">
           <div class="flex flex-col gap-4">
             <textarea
-              id="private-message"
-              v-model="privateMessage"
-              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
+              id="welcome-message"
+              v-model="welcomeMessage"
+              class="p-2 rounded-md border bg-dark-blue2 border-slate-800 w-1/3 mb-4"
               rows="4"
-              placeholder="Entrez votre message privé ici..."
+              placeholder="Entrez votre message de bienvenue ici..."
             ></textarea>
           </div>
         </div>
       </div>
 <!---------------------------------------------------------------------------------------------- -->
 
-            <!-- Bouton Toggle pour la configuration des messages de bienvenu public -->
-            <div class="welcomeMessage border border-slate-800 rounded-xl">
+            <!-- Bouton Toggle pour la configuration des rôles à l'arrivée -->
+            <div class="welcomeMessage border border-slate-800 rounded-xl bg-dark-blue2">
         <div class="welcomeMessageTitle flex w-full justify-between items-center p-4">
-          <h1 class="text-xl font-semibold">Envoyer un message de bienvenue public</h1>
+          <h2 class="text-lg font-semibold">Attribuer un rôle aux nouveaux utilisateurs</h2>
   
           <!-- Bouton toggle personnalisé -->
           <input
@@ -74,128 +137,27 @@
             type="checkbox"
             class="hide-me"
             aria-labelledby="cb-label"
-            @change="togglePublicMessageConfig"
-            :checked="isPublicMessageConfigOpen"
+            @change="toggleConfigRole"
+            :checked="isRoleConfigOpen"
           >
           <label for="cb-toggle" class="toggle"></label>
         </div>
   
         <!-- Section de configuration des messages de bienvenue -->
-        <div v-if="isPublicMessageConfigOpen" class="welcome-config p-4">
-          <div class="flex flex-col gap-4">
-            <textarea
-              id="welcome-public-message"
-              v-model="publicMessage"
-              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
-              rows="4"
-              placeholder="Entrez votre message de bienvenue ici..."
-            ></textarea>
-  
-          </div>
-        </div>
-      </div>
-<!---------------------------------------------------------------------------------------------- -->
-
-            <!-- Bouton Toggle pour la configuration du salon -->
-            <div class="welcomeMessage border border-slate-800 rounded-xl">
-        <div class="welcomeMessageTitle flex w-full justify-between items-center p-4">
-          <h1 class="text-xl font-semibold">Configuration du salon</h1>
-  
-          <!-- Bouton toggle personnalisé -->
-          <input
-            id="cb-toggle-config-room"
-            type="checkbox"
-            class="hide-me"
-            aria-labelledby="cb-label"
-            @change="toggleRoomConfig"
-            :checked="isRoomConfigOpen"
-          >
-          <label for="cb-toggle-config-room" class="toggle"></label>
-        </div>
-  
-        <!-- Section de configuration des messages de bienvenue -->
-        <div v-if="isRoomConfigOpen" class="welcome-config p-4">
-          <div class="flex flex-col gap-4">
-            <textarea
-              id="room-config"
-              v-model="roomConfig"
-              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
-              rows="4"
-              placeholder="Entrez votre message de bienvenue ici..."
-            ></textarea>
-  
-          </div>
+        <div v-if="isRoleConfigOpen" class="welcome-config p-4">
+          <!-- Rôle d'arrivée -->
+          <h3 class="text-light-grey">Rôle d'arrivée</h3>
+          <select class=" rounded-md border bg-dark-blue2 border-slate-800 mb-4  mt-2 pl-3 py-2 pr-24">
+            <option value="general">Admin</option>
+            <option value="welcome">Modo</option>
+            <option value="rules">Membre</option>
+        </select>
         </div>
       </div>
 
       <!---------------------------------------------------------------------------------------------- -->
 
-            <!-- Bouton Toggle pour la configuration du thème de la carte de bienvenue -->
-            <div class="welcomeMessage border border-slate-800 rounded-xl">
-        <div class="welcomeMessageTitle flex w-full justify-between items-center p-4">
-          <h1 class="text-xl font-semibold">Personnaliser la carte de bienvenue</h1>
-  
-          <!-- Bouton toggle personnalisé -->
-          <input
-            id="cb-toggle-welcome-card"
-            type="checkbox"
-            class="hide-me"
-            aria-labelledby="cb-label"
-            @change="toggleWelcomeCardConfig"
-            :checked="isWelcomeCardConfigOpen"
-          >
-          <label for="cb-toggle-welcome-card" class="toggle"></label>
-        </div>
-  
-        <!-- Section de configuration des messages de bienvenue -->
-        <div v-if="isWelcomeCardConfigOpen" class="welcome-config p-4">
-          <div class="flex flex-col gap-4">
-            <textarea
-              id="welcome-message"
-              v-model="welcomeCardConfig"
-              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
-              rows="4"
-              placeholder="Entrez votre message de bienvenue ici..."
-            ></textarea>
-  
-          </div>
-        </div>
-      </div>
 
-
-            <!---------------------------------------------------------------------------------------------- -->
-
-            <!-- Bouton Toggle pour la configuration d'un design prédéfini -->
-            <div class="welcomeMessage border border-slate-800 rounded-xl">
-        <div class="welcomeMessageTitle flex w-full justify-between items-center p-4">
-          <h1 class="text-xl font-semibold">Importer un design prédéfini</h1>
-  
-          <!-- Bouton toggle personnalisé -->
-          <input
-            id="cb-toggle-predefined-design"
-            type="checkbox"
-            class="hide-me"
-            aria-labelledby="cb-label"
-            @change="togglePredefinedDesignConfig"
-            :checked="isPredefinedDesignConfigOpen"
-          >
-          <label for="cb-toggle-predefined-design" class="toggle"></label>
-        </div>
-  
-        <!-- Section de configuration des messages de bienvenue -->
-        <div v-if="isPredefinedDesignConfigOpen" class="welcome-config p-4">
-          <div class="flex flex-col gap-4">
-            <textarea
-              id="welcome-message"
-              v-model="predefinedDesignConfig"
-              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
-              rows="4"
-              placeholder="Entrez votre message de bienvenue ici..."
-            ></textarea>
-  
-          </div>
-        </div>
-      </div>
 
     </div>
   </template>
@@ -206,17 +168,15 @@
   // États pour chaque section de configuration
   const isWelcomeConfigOpen = ref(false);
   const isPrivateMessageConfigOpen = ref(false);
-  const isPublicMessageConfigOpen = ref(false);
-  const isRoomConfigOpen = ref(false);
-  const isWelcomeCardConfigOpen = ref(false);
+  const isRoleConfigOpen = ref(false);
+  const isCaptchaOpen = ref(false);
   const isPredefinedDesignConfigOpen = ref(false);
 
   
   // Messages pour chaque section
   const welcomeMessage = ref('');
   const privateMessage = ref('');
-    const publicMessage = ref('');
-    const roomConfig = ref('');
+    const configRole = ref('');
     const welcomeCardConfig = ref('');
     const predefinedDesignConfig = ref('');
 
@@ -230,16 +190,13 @@
     isPrivateMessageConfigOpen.value = !isPrivateMessageConfigOpen.value;
   };
 
-    const togglePublicMessageConfig = () => {
-        isPublicMessageConfigOpen.value = !isPublicMessageConfigOpen.value;
+    const toggleConfigRole = () => {
+        isRoleConfigOpen.value = !isRoleConfigOpen.value;
     };
 
-    const toggleRoomConfig = () => {
-        isRoomConfigOpen.value = !isRoomConfigOpen.value;
-    };
 
-    const toggleWelcomeCardConfig = () => {
-        isWelcomeCardConfigOpen.value = !isWelcomeCardConfigOpen.value;
+    const toggleCaptcha = () => {
+        isCaptchaOpen.value = !isCaptchaOpen.value;
     };
 
     const togglePredefinedDesignConfig = () => {
