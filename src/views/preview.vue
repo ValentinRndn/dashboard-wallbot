@@ -23,16 +23,41 @@
   
         <!-- Section de configuration des messages de bienvenue -->
         <div v-if="isCaptchaOpen" class="welcome-config p-4">
-          <div class="flex flex-col gap-4">
-            <textarea
-              id="welcome-message"
-              v-model="CaptchaConfig"
-              class="p-2 rounded-md border bg-dark-blue2 border-slate-800"
-              rows="4"
-              placeholder="Entrez votre message de bienvenue ici..."
-            ></textarea>
-  
+
+          <h3 class="text-light-grey mb-4">Message de vérification <span class="text-red">*</span> </h3>
+
+          <div class="captcha flex flex-row gap-2 w-2/4">
+            <img class="pp w-9 h-9 rounded-full border border-slate-800 object-center mt-3" src="../assets/logo-wallbot.png" alt="logo-wallbot">
+
+            <div class="captcha-right flex flex-col gap-2">
+              <div class="bot flex gap-2 w-fit">
+                <div class="bot-pseudo flex items-center justify-center gap-2">
+                  <p class="font-semibold">WallBot</p>
+                  <div class="bot-tag flex items-center text-center bg-discord w-fit h-[20px] px-1 rounded-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="m10 13.6l5.9-5.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-6.6 6.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275z" />
+                    </svg>
+                    <p class="text-sm font-semibold">BOT</p>
+                  </div>
+                  </div>
+                </div>
+            
+
+            <!-- Contenu avec la barre bleue verticale -->
+            <div class="captcha-content bg-grey-discord p-4 flex flex-col gap-2 rounded-lg border-l-4 border-blue w-full">
+              <h3 class="font-semibold">Vérification</h3>
+              <p class="text-sm">Pour accéder à ce serveur et voir tous les salons, tu dois d'abord prouver que tu es un être humain. Clique sur le bouton ci-dessous pour commencer</p>
+            </div>
+
+            <!-- Bouton de vérification -->
+            <button class="bg-blue text-white rounded-md w-[80px] font-semibold p-2">Vérifier</button>
           </div>
+        </div>
+
+        <div class="border-b border-slate-800 my-4"></div>
+
+        <button class="bg-blue text-white rounded-md w-[80px] font-semibold p-2">Publier</button>
+
         </div>
       </div>
   
@@ -80,15 +105,6 @@
               placeholder="Entrez votre message de bienvenue ici..."
             ></textarea>
           </div>
-          <div class="border-b border-slate-800 mb-4"></div>
-
-          <!-- Rôle d'arrivée -->
-          <h3 class="text-light-grey">Rôle d'arrivée <span class="text-red">*</span> </h3>
-          <select class=" rounded-md border bg-dark-blue2 border-slate-800 mb-4  mt-2 pl-3 py-2 pr-24">
-            <option value="general">Admin</option>
-            <option value="welcome">Modo</option>
-            <option value="rules">Membre</option>
-        </select>
         </div>
 
         

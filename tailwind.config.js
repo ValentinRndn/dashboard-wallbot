@@ -14,7 +14,8 @@ export default {
         'dark-blue2': '#00050c',
         'dark-progress': '#0E2043',
         'red': '#ff6262',
-
+        'discord' : '#5865F2',
+        'grey-discord': '#131417',
       },
       fontFamily: {
         // 'cgothic': ['c-gothic', 'sans-serif'],
