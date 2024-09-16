@@ -21,44 +21,54 @@
           <label for="cb-captcha" class="toggle"></label>
         </div>
   
-        <!-- Section de configuration des messages de bienvenue -->
-        <div v-if="isCaptchaOpen" class="welcome-config p-4">
-
-          <h3 class="text-light-grey mb-4">Message de vérification <span class="text-red">*</span> </h3>
-
-          <div class="captcha flex flex-row gap-2 w-2/4">
-            <img class="pp w-9 h-9 rounded-full border border-slate-800 object-center mt-3" src="../assets/logo-wallbot.png" alt="logo-wallbot">
-
-            <div class="captcha-right flex flex-col gap-2">
-              <div class="bot flex gap-2 w-fit">
-                <div class="bot-pseudo flex items-center justify-center gap-2">
-                  <p class="font-semibold">WallBot</p>
-                  <div class="bot-tag flex items-center text-center bg-discord w-fit h-[20px] px-1 rounded-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="m10 13.6l5.9-5.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-6.6 6.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275z" />
-                    </svg>
-                    <p class="text-sm font-semibold">BOT</p>
-                  </div>
-                  </div>
-                </div>
-            
-
-            <!-- Contenu avec la barre bleue verticale -->
-            <div class="captcha-content bg-grey-discord p-4 flex flex-col gap-2 rounded-lg border-l-4 border-blue w-full">
-              <h3 class="font-semibold">Vérification</h3>
-              <p class="text-sm">Pour accéder à ce serveur et voir tous les salons, tu dois d'abord prouver que tu es un être humain. Clique sur le bouton ci-dessous pour commencer</p>
-            </div>
-
-            <!-- Bouton de vérification -->
-            <button class="bg-blue text-white rounded-md w-[80px] font-semibold p-2">Vérifier</button>
+<!-- Section de configuration des messages de bienvenue -->
+<div v-if="isCaptchaOpen" class="welcome-config p-4">
+  <h3 class="text-light-grey mb-4">Message de vérification <span class="text-red">*</span> </h3>
+  
+  <div class="captcha flex flex-row gap-2 w-2/4">
+    <div class="captcha-left flex flex-col gap-2">
+      <img class="pp w-9 h-9 rounded-full border border-slate-800 object-center mt-3" src="../assets/logo-wallbot.png" alt="logo-wallbot">
+      <!-- Input color avec style personnalisé -->
+      <input 
+        type="color" 
+        class="rounded-full w-9 h-9 border-none cursor-pointer shadow-md" 
+        :value="selectedColor" 
+        id="color-message"
+        @input="selectedColor = $event.target.value"
+      >
+    </div>
+    <div class="captcha-right flex flex-col gap-2">
+      <div class="bot flex gap-2 w-fit">
+        <div class="bot-pseudo flex items-center justify-center gap-2">
+          <p class="font-semibold">WallBot</p>
+          <div class="bot-tag flex items-center text-center bg-discord w-fit h-[20px] px-1 rounded-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+              <path fill="currentColor" d="m10 13.6l5.9-5.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-6.6 6.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275z" />
+            </svg>
+            <p class="text-sm font-semibold">BOT</p>
           </div>
         </div>
+      </div>
 
-        <div class="border-b border-slate-800 my-4"></div>
+      <!-- Contenu avec la barre de bordure verticale dynamique -->
+      <div 
+        class="captcha-content bg-grey-discord p-4 flex flex-col gap-2 rounded-lg border-l-4 w-full"
+        :style="{ borderLeftColor: selectedColor }"
+      >
+        <h3 class="font-semibold">Vérification</h3>
+        <p class="text-sm">Pour accéder à ce serveur et voir tous les salons, tu dois d'abord prouver que tu es un être humain. Clique sur le bouton ci-dessous pour commencer</p>
+      </div>
 
-        <button class="bg-blue text-white rounded-md w-[80px] font-semibold p-2">Publier</button>
+      <!-- Bouton de vérification -->
+      <button class="bg-blue text-white rounded-md w-[80px] font-semibold p-2">Vérifier</button>
+    </div>
+  </div>
 
-        </div>
+  <div class="border-b border-slate-800 my-4"></div>
+
+  <button class="bg-blue text-white rounded-md w-[80px] font-semibold p-2">Publier</button>
+</div>
+
       </div>
   
 
@@ -178,6 +188,15 @@
     </div>
   </template>
   
+  <script>
+  export default {
+    data() {
+      return {
+        selectedColor: '#0000ff',
+      }
+    }
+  }
+</script>
   <script setup>
   import { ref } from 'vue';
   
@@ -224,6 +243,28 @@
   </script>
   
   <style scoped>
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+  }
+  
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+  }
+  
   .toggle-button {
     cursor: pointer;
     transition: background-color 0.2s ease-out;
