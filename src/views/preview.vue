@@ -28,14 +28,19 @@
   <div class="captcha flex flex-row gap-2 w-2/4">
     <div class="captcha-left flex flex-col gap-2">
       <img class="pp w-9 h-9 rounded-full border border-slate-800 object-center mt-3" src="../assets/logo-wallbot.png" alt="logo-wallbot">
-      <!-- Input color avec style personnalisé -->
-      <input 
-        type="color" 
-        class="rounded-full w-9 h-9 border-none cursor-pointer shadow-md" 
-        :value="selectedColor" 
-        id="color-message"
-        @input="selectedColor = $event.target.value"
-      >
+      <div class="relative inline-block">
+        <svg xmlns="http://www.w3.org/2000/svg"  @click="triggerColorPicker" class="w-9 h-9 rounded-full cursor-pointer shadow-md" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5c0-.39-.15-.74-.39-1.01c-.23-.26-.38-.61-.38-.99c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5c0-4.42-4.03-8-9-8m-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9S8 9.67 8 10.5S7.33 12 6.5 12m3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8m5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8m3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5"/></svg>
+
+  <!-- Input color masqué -->
+  <input 
+    type="color" 
+    class="absolute top-0 left-0 w-9 h-9 opacity-0"
+    :value="selectedColor"
+    id="color-message"
+    @input="selectedColor = $event.target.value"
+    ref="colorPicker"
+  >
+</div>
     </div>
     <div class="captcha-right flex flex-col gap-2">
       <div class="bot flex gap-2 w-fit">
@@ -52,12 +57,85 @@
 
       <!-- Contenu avec la barre de bordure verticale dynamique -->
       <div 
-        class="captcha-content bg-grey-discord p-4 flex flex-col gap-2 rounded-lg border-l-4 w-full"
-        :style="{ borderLeftColor: selectedColor }"
-      >
-        <h3 class="font-semibold">Vérification</h3>
-        <p class="text-sm">Pour accéder à ce serveur et voir tous les salons, tu dois d'abord prouver que tu es un être humain. Clique sur le bouton ci-dessous pour commencer</p>
+  class="captcha-content bg-grey-discord p-4 flex flex-col gap-2 rounded-lg border-l-4 w-3/5 min-w-[500px] relative"
+  :style="{ borderLeftColor: selectedColor }"
+>
+  <!-- Affiche le paragraphe ou le textarea en fonction de l'état d'édition -->
+  <div v-if="isEditing" class="flex flex-col">
+    <div class="top-content flex justify-between">
+      <div class="top-left-content flex flex-col gap-2">
+        <!-- Image d'en-tête -->
+        <div v-if="headerImage" class="relative">
+          <img :src="headerImage" alt="headerImage" class="w-20 h-20 cursor-pointer" @click="removeImage('headerImage')">
+        </div>
+        <div v-else class="file-upload-wrapper w-full relative mx-auto  hover:text-blue ">
+          <label class="custom-file-upload flex items-center justify-center w-[50px] h-[50px] border border-dashed border-white rounded-full cursor-pointer transition ease-in-out delay-100 relative hover:border-blue ">
+            <input type="file" @change="onImageChange($event, 'headerImage')" accept="image/*">
+            <div class="file-upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zm1-2h12l-3.75-5l-3 4L9 13zm-1 2V5z"/></svg>      
+          </div>
+          </label>
+        </div>
+
+        <input v-model="titleContent" class="bg-grey-discord font-semibold mb-4" type="text" name="titleContent" id="titleContent">
       </div>
+
+      <!-- Autre image -->
+      <div v-if="anotherImage" class="relative">
+        <img :src="anotherImage" alt="anotherImage" class="w-20 h-20 cursor-pointer" @click="removeImage('anotherImage')">
+      </div>
+      <div v-else class="file-upload-wrapper relative hover:text-blue">
+       <label class="custom-file-upload flex items-center justify-center w-[70px] h-[70px] border border-dashed border-white rounded-lg cursor-pointer transition hover:border-blue">
+      <input type="file" @change="onImageChange($event, 'anotherImage')" accept="image/*">
+          <div class="file-upload-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zm1-2h12l-3.75-5l-3 4L9 13zm-1 2V5z"/></svg>          
+           </div>
+        </label>
+      </div>
+    </div>
+
+    <textarea 
+      v-model="messageContent"
+      class="w-full p-2 rounded-md bg-grey-discord"
+      rows="4"
+    ></textarea>
+
+    <!-- Image d'intégration -->
+    <div v-if="embedImage" class="relative mx-auto">
+  <img :src="embedImage" alt="embedImage" class="w-20 h-20 cursor-pointer" @click="removeImage('embedImage')">
+</div>
+<div v-else class="file-upload-wrapper w-full relative mx-auto  hover:text-blue">
+  <label class="custom-file-upload flex items-center justify-center w-full h-[130px] mt-4 border border-dashed border-white rounded-lg cursor-pointer transition hover:border-blue">
+    <input type="file" @change="onImageChange($event, 'embedImage')" accept="image/*">
+    <div class="file-upload-icon flex flex-col items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="" width="40" height="40" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zm1-2h12l-3.75-5l-3 4L9 13zm-1 2V5z"/>
+      </svg>
+    </div>
+  </label>
+</div>
+
+
+    <button @click="saveContent" class="bg-blue text-white rounded-md w-[80px] font-semibold p-2 mt-2">Valider</button>
+  </div>
+
+  <div v-else @click="toggleEdit" class="isNotEditing relative cursor-pointer">
+    <!-- Texte avec effet de flou au survol -->
+    <div class="hover:blur-sm duration-500">
+      <h3 class="font-semibold">{{ titleContent }}</h3>
+      <p class="text-sm">{{ messageContent }}</p>
+    </div>
+    
+    <!-- Icône d'édition qui apparaît au survol sans effet de flou -->
+    <div class="edit-icon absolute flex items-center justify-center opacity-0 transition-opacity duration-300 z-10 group-hover:opacity-100">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="currentColor" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/></svg>
+    </div>
+  </div>
+</div>
+
+
+
+
 
       <!-- Bouton de vérification -->
       <button class="bg-blue text-white rounded-md w-[80px] font-semibold p-2">Vérifier</button>
@@ -193,9 +271,36 @@
     data() {
       return {
         selectedColor: '#0000ff',
+        messageContent: 'Pour accéder à ce serveur et voir tous les salons, tu dois d\'abord prouver que tu es un être humain. Clique sur le bouton ci-dessous pour commencer',
+        titleContent: 'Vérification',
+        headerImage: null,
+        miniatureImage: null,
+        embedImage: null,
+        isEditing: false,
       }
+    },
+    methods: {
+    toggleEdit() {
+      this.isEditing = !this.isEditing; // Bascule l'état d'édition
+    },
+    saveContent() {
+      this.isEditing = false; // Sauvegarde le contenu et sort du mode édition
+    },
+    onImageChange(event, imageType) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this[imageType] = e.target.result; // Définit l'image sélectionnée pour le type spécifique
+        };
+        reader.readAsDataURL(file); // Lit le fichier sélectionné
+      }
+    },
+    removeImage(imageType) {
+      this[imageType] = null; // Supprime l'image sélectionnée pour le type spécifique
     }
-  }
+  },
+};
 </script>
   <script setup>
   import { ref } from 'vue';
@@ -243,8 +348,38 @@
   </script>
   
   <style scoped>
+  /* Masque l'input file natif */
+.file-upload-wrapper input[type="file"] {
+  display: none;
+}
+
+
+
+.upload-text {
+  font-size: 12px;
+  color: #6b7280; /* Couleur de texte grise */
+}
+
+  .captcha-content {
+  position: relative; /* Positionnement relatif pour l'élément parent */
+}
+
+.edit-icon {
+  position: absolute; /* Positionnement absolu pour centrer l'icône */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centrage de l'icône */
+  opacity: 0; /* Icône masquée par défaut */
+  transition: opacity 0.3s; /* Transition en douceur pour l'effet de survol */
+}
+
+.isNotEditing:hover .edit-icon {
+  opacity: 1; /* Affiche l'icône au survol */
+}
+
+
   input[type="color"] {
-    -webkit-appearance: none;
+    appearance: none;
     border: none;
     width: 36px;
     height: 36px;
