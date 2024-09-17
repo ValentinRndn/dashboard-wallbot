@@ -16,6 +16,7 @@ export default {
         'red': '#ff6262',
         'discord' : '#5865F2',
         'grey-discord': '#131417',
+        'blue-selected' : '#131C2D',
       },
       fontFamily: {
         // 'cgothic': ['c-gothic', 'sans-serif'],

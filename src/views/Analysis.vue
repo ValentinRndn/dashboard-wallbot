@@ -128,6 +128,8 @@ import { ref, onMounted, watch } from 'vue';
 import { Chart } from 'chart.js/auto';
 
 export default {
+  name: 'Analysis',
+
   setup() {
         // Exemple de données de classement
         const members = ref([
