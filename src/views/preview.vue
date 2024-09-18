@@ -7,6 +7,8 @@
         nouveaux membres, attribue leur des rôles et fais leur des message
         d'adieu.
       </p>
+          <div class="border-b border-slate-800 mb-4 w-full my-4"></div>
+
     </div>
     <!-- Bouton Toggle pour le captcha-->
     <div
@@ -46,29 +48,60 @@
               alt="logo-wallbot"
             />
             <div class="relative inline-block">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
+              <img
+                src="../assets/captcha/colorPalett.png"
                 @click="triggerColorPicker"
-                class="w-9 h-9 rounded-full cursor-pointer shadow-md"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5c0-.39-.15-.74-.39-1.01c-.23-.26-.38-.61-.38-.99c0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5c0-4.42-4.03-8-9-8m-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9S8 9.67 8 10.5S7.33 12 6.5 12m3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8m5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8m3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5"
-                />
-              </svg>
+                alt="colorPalett"
+                class="w-9 h-9 rounded-full cursor-pointer border border-slate-800 object-center"
+              />
 
               <!-- Input color masqué -->
               <input
                 type="color"
-                class="absolute top-0 left-0 w-9 h-9 opacity-0"
+                class="absolute top-0 left-0 opacity-0"
                 :value="selectedColor"
                 id="color-message"
                 @input="selectedColor = $event.target.value"
                 ref="colorPicker"
               />
+
+              <button
+                @click="toggleEdit"
+                class="bg-blue text-white rounded-full font-semibold mt-2 border border-slate-800 w-9 h-9"
+              >
+                <div v-if="!isEditing" class="toggleEdit">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    class="ml-2"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"
+                    />
+                  </svg>
+                </div>
+                <div v-else isEditing class="t">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    class="ml-[5px]"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="m11.25 4.75l-6.5 6.5m0-6.5l6.5 6.5"
+                    />
+                  </svg>
+                </div>
+              </button>
             </div>
           </div>
           <div class="captcha-right flex flex-col gap-2">
@@ -103,44 +136,6 @@
               <div v-if="isEditing" class="flex flex-col">
                 <div class="top-content flex justify-between">
                   <div class="top-left-content flex flex-col gap-2 w-full">
-                    <!-- Image d'en-tête -->
-                    <div v-if="headerImage" class="relative">
-                      <img
-                        :src="headerImage"
-                        alt="headerImage"
-                        class="w-12 h-12 cursor-pointer rounded-full object-cover"
-                        @click="removeImage('headerImage')"
-                      />
-                    </div>
-                    <div
-                      v-else
-                      class="file-upload-wrapper w-full relative mx-auto hover:text-blue"
-                    >
-                      <label
-                        class="custom-file-upload flex items-center justify-center w-[50px] h-[50px] border border-dashed border-white rounded-full cursor-pointer transition ease-in-out delay-100 relative hover:border-blue"
-                      >
-                        <input
-                          type="file"
-                          @change="onImageChange($event, 'headerImage')"
-                          accept="image/*"
-                        />
-                        <div class="file-upload-icon">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class=""
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zm1-2h12l-3.75-5l-3 4L9 13zm-1 2V5z"
-                            />
-                          </svg>
-                        </div>
-                      </label>
-                    </div>
-
                     <input
                       v-model="titleContent"
                       class="bg-grey-discord font-semibold"
@@ -150,26 +145,25 @@
                     />
 
                     <textarea
-                  v-model="messageContent"
-                  class="w-full p-2 rounded-md bg-grey-discord"
-                  rows="4"
-                ></textarea>
+                      v-model="messageContent"
+                      class="w-full p-2 rounded-md bg-grey-discord"
+                      rows="4"
+                    ></textarea>
                   </div>
 
-
-
                   <!-- Miniature Image -->
-                  <div v-if="anotherImage" class="relative">
+                  <div v-if="anotherImage" class="relative group w-24 h-20">
                     <img
                       :src="anotherImage"
                       alt="anotherImage"
-                      class="w-24 h-20 cursor-pointer object-cover object-center rounded-lg"
+                      class="w-24 h-20 cursor-pointer object-cover object-center rounded-lg group-hover:filter group-hover:grayscale group-hover:transition-all duration-300"
                       @click="removeImage('anotherImage')"
                     />
                   </div>
+
                   <div
                     v-else
-                    class="file-upload-wrapper relative hover:text-blue"
+                    class="file-upload-wrapper hover:text-blue w-[80px] h-[80px]"
                   >
                     <label
                       class="custom-file-upload flex items-center justify-center w-[80px] h-[80px] border border-dashed border-white rounded-lg cursor-pointer transition hover:border-blue"
@@ -202,7 +196,7 @@
                   <img
                     :src="embedImage"
                     alt="embedImage"
-                    class="w-full h-[150px] cursor-pointer object-cover object-center rounded-lg mt-4"
+                    class="w-full h-[150px] cursor-pointer object-cover object-center rounded-lg mt-4 group-hover:filter group-hover:grayscale group-hover:transition-all duration-300"
                     @click="removeImage('embedImage')"
                   />
                 </div>
@@ -235,12 +229,43 @@
                   </label>
                 </div>
 
-                <button
-                  @click="saveContent"
-                  class="bg-blue text-white rounded-md w-[80px] font-semibold p-2 mt-2"
+                <!-- Image footer -->
+                <div v-if="footerImage" class="relative">
+                  <img
+                    :src="footerImage"
+                    alt="footerImage"
+                    class="w-10 h-10 cursor-pointer rounded-full object-cover my-4"
+                    @click="removeImage('footerImage')"
+                  />
+                </div>
+                <div
+                  v-else
+                  class="file-upload-wrapper w-[50px] relative hover:text-blue"
                 >
-                  Valider
-                </button>
+                  <label
+                    class="custom-file-upload flex items-center justify-center w-[50px] h-[50px] border border-dashed border-white rounded-full cursor-pointer transition ease-in-out relative hover:border-blue mt-4"
+                  >
+                    <input
+                      type="file"
+                      @change="onImageChange($event, 'footerImage')"
+                      accept="image/*"
+                    />
+                    <div class="file-upload-icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class=""
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zm1-2h12l-3.75-5l-3 4L9 13zm-1 2V5z"
+                        />
+                      </svg>
+                    </div>
+                  </label>
+                </div>
               </div>
 
               <div
@@ -250,42 +275,41 @@
               >
                 <!-- Texte avec effet de flou au survol -->
                 <div class="hover:blur-sm duration-500">
+                  <div
+                    class="top-content-not-editing flex justify-between w-full"
+                  >
+                    <div
+                      class="top-content-left-not-editingflex flex-col gap-2 max-w-1/2"
+                    >
+                      <h3 class="font-semibold mb-2">{{ titleContent }}</h3>
+                      <p class="text-sm">{{ messageContent }}</p>
+                    </div>
 
-                  <div class="top-content-not-editing flex justify-between w-full">
-
-                    <div class="top-content-left-not-editingflex flex-col gap-2 max-w-1/2">
-                  <div v-if="headerImage" class="relative ">
-                  <img
-                    :src="headerImage"
-                    alt="headerImage"
-                    class="w-12 h-12 cursor-pointer rounded-full object-cover mb-2"
-                  />
-                </div>
-                  <h3 class="font-semibold mb-2">{{ titleContent }}</h3>
-                  <p class="text-sm">{{ messageContent }}</p>
-
-                </div>
-
-                <div class="top-content-not-editing-right">
-                  <div v-if="anotherImage" class="relative">
-                    <img
-                      :src="anotherImage"
-                      alt="anotherImage"
-                      class="w-48 h-20 cursor-pointer object-cover object-center rounded-lg "
-                    />
+                    <div class="top-content-not-editing-right">
+                      <div v-if="anotherImage" class="relative">
+                        <img
+                          :src="anotherImage"
+                          alt="anotherImage"
+                          class="w-48 h-20 cursor-pointer object-cover object-center rounded-lg"
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                </div>
-
-
 
                   <div v-if="embedImage" class="relative mx-auto">
                     <img
                       :src="embedImage"
                       alt="embedImage"
-                      class="w-full h-[150px] cursor-pointer object-cover object-center rounded-lg mt-4 "
+                      class="w-full h-[150px] cursor-pointer object-cover object-center rounded-lg mt-4"
                     />
-                    </div>
+                  </div>
+                  <div v-if="footerImage" class="relative">
+                    <img
+                      :src="footerImage"
+                      alt="footerImage"
+                      class="w-10 h-10 cursor-pointer rounded-full object-cover mt-4"
+                    />
+                  </div>
                 </div>
 
                 <!-- Icône d'édition qui apparaît au survol sans effet de flou -->
@@ -379,79 +403,126 @@
 
         <div class="welcome-public-card flex items-center gap-2">
           <div class="toggle-button">
-        <input
-          id="cb-toggle-welcome-card"
-          type="checkbox"
-          class="hide-me"
-          @change="toggleWelcomePublicCard"
-          :checked="welcomePublicCard"
-        />
-        <label for="cb-toggle-welcome-card" class="toggle"></label>
+            <input
+              id="cb-toggle-welcome-card"
+              type="checkbox"
+              class="hide-me"
+              @change="toggleWelcomePublicCard"
+              :checked="welcomePublicCard"
+            />
+            <label for="cb-toggle-welcome-card" class="toggle"></label>
+          </div>
+          <h3 class="font-semibold">
+            Envoyer une carte de bienvenue lorsqu'un utilisateur à rejoint le
+            serveur
+          </h3>
+        </div>
+
+        <div v-if="welcomePublicCard" class="welcomePublicCardContainer">
+          <div
+            class="card w-3/5 flex flex-col items-center justify-center py-5 px-24 border border-slate-800 rounded-lg mt-4"
+            :style="{
+              backgroundColor: selectedCardBgColor,
+              fontFamily: selectedFont,
+            }"
+          >
+            <img
+              src="../assets/logo-wallbot.png"
+              alt="card-logo"
+              class="rounded-full w-[200px] border-4 border-white mb-3"
+            />
+            <p
+              class="text-xl font-semibold"
+              :style="{ color: mainCardTextColor }"
+            >
+              {{ mainCardText }}
+            </p>
+
+            <p
+              class="text-lg text-light-grey font-semibold"
+              :style="{ color: subCardTextColor }"
+            >
+              {{ subCardText }}
+            </p>
+          </div>
+
+          <div class="border-b border-slate-800 mb-4 w-3/5 my-4"></div>
+
+          <!-- Contrôles de personnalisation -->
+          <div
+            class="controls flex flex-col gap-4 mb-4 p-1 rounded-lg w[60%] m-auto"
+          >
+            <!-- Sélecteur de police d'écriture -->
+            <label class="flex flex-col">
+              <h3 class="bg-dark-blue2 text-light-grey mb-2">
+                Choisis une police d'écriture
+              </h3>
+              <select
+                v-model="selectedFont"
+                class="p-2 border border-slate-800 rounded-md bg-dark-blue2"
+              >
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+              </select>
+            </label>
+
+            <!-- Sélecteur de couleur de fond -->
+            <label class="flex flex-col">
+              <h3 class="bg-dark-blue2 text-light-grey mb-2">
+                Choisis la couleur du fond
+              </h3>
+              <input
+                type="color"
+                v-model="selectedCardBgColor"
+                class="h-8 cursor-pointer p-0 border-none"
+              />
+            </label>
+
+            <!-- Modification du texte de la carte -->
+            <label class="flex flex-col">
+              <h3 class="bg-dark-blue2 text-light-grey mb-2">
+                Configure le texte principal
+              </h3>
+
+              <input
+                type="text"
+                v-model="mainCardText"
+                class="p-2 border border-slate-800 rounded-md bg-dark-blue2"
+                placeholder="Entrez le texte principal"
+              />
+            </label>
+            <input
+              type="color"
+              v-model="mainCardTextColor"
+              class="h-8 cursor-pointer p-0 border-none"
+            />
+
+            <!-- Modification du texte secondaire de la carte -->
+            <label class="flex flex-col bg-dark-blue2">
+              <h3 class="bg-dark-blue2 text-light-grey mb-2">
+                Couleur du texte secondaire
+              </h3>
+
+              <input
+                type="text"
+                v-model="subCardText"
+                class="p-2 border border-slate-800 rounded-md bg-dark-blue2"
+                placeholder="Entrez le texte secondaire"
+              />
+            </label>
+            <input
+              type="color"
+              v-model="subCardTextColor"
+              class="h-8 cursor-pointer p-0 border-none"
+            />
+          </div>
+
+          <!-- Carte personnalisable -->
+        </div>
       </div>
-        <h3 class="font-semibold">Envoyer une carte de bienvenue lorsqu'un utilisateur à rejoint le serveur</h3>
-      </div>
-
-      <div v-if="welcomePublicCard" class="welcomePublicCardContainer">
-
-
-
-    <div 
-    class="card w-3/5 flex flex-col items-center justify-center py-5 px-24 border border-slate-800 rounded-lg mt-4"
-    :style="{ backgroundColor: selectedCardBgColor, fontFamily: selectedFont }"
-  >
-    <img src="../assets/logo-wallbot.png" alt="card-logo" class="rounded-full w-[200px] border-4 border-white mb-3">
-    <p class="text-xl font-semibold" :style="{ color: mainCardTextColor}">{{ mainCardText }}</p>
-
-    <p class="text-lg text-light-grey font-semibold" :style="{color: subCardTextColor}">{{ subCardText }}</p>
-  </div>
-
-  <div class="border-b border-slate-800 mb-4 w-3/5 my-4"></div>
-
-  <!-- Contrôles de personnalisation -->
-  <div class="controls flex flex-col gap-4 mb-4 p-1 rounded-lg w[60%] m-auto">
-      <!-- Sélecteur de police d'écriture -->
-      <label class="flex flex-col">
-      <h3 class="bg-dark-blue2 text-light-grey mb-2">Choisis une police d'écriture</h3>
-      <select v-model="selectedFont" class="p-2 border border-slate-800 rounded-md bg-dark-blue2">
-        <option value="Arial">Arial</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Georgia">Georgia</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Verdana">Verdana</option>
-      </select>
-    </label>
-
-    <!-- Sélecteur de couleur de fond -->
-    <label class="flex flex-col">
-      <h3 class="bg-dark-blue2 text-light-grey mb-2">Choisis la couleur du fond</h3>
-      <input type="color" v-model="selectedCardBgColor" class=" h-8 cursor-pointer p-0 border-none">
-    </label>
-
-    
-    <!-- Modification du texte de la carte -->
-    <label class="flex flex-col">
-      <h3 class="bg-dark-blue2 text-light-grey mb-2">Configure le texte principal</h3>
-
-      <input type="text" v-model="mainCardText" class="p-2 border border-slate-800 rounded-md bg-dark-blue2" placeholder="Entrez le texte principal">
-    </label>
-      <input type="color" v-model="mainCardTextColor" class=" h-8 cursor-pointer p-0 border-none">
-
-
-      <!-- Modification du texte secondaire de la carte -->
-    <label class="flex flex-col bg-dark-blue2">
-      <h3 class="bg-dark-blue2 text-light-grey mb-2">Couleur du texte secondaire</h3>
-
-      <input type="text" v-model="subCardText" class="p-2 border border-slate-800 rounded-md bg-dark-blue2" placeholder="Entrez le texte secondaire">
-    </label>
-    <input type="color" v-model="subCardTextColor" class=" h-8 cursor-pointer p-0 border-none">
-  </div>
-
-  <!-- Carte personnalisable -->
-
-
-</div>
-
-    </div>
     </div>
 
     <!---------------------------------------------------------------------------------------------- -->
@@ -541,7 +612,7 @@ export default {
       messageContent:
         "Pour accéder à ce serveur et voir tous les salons, tu dois d'abord prouver que tu es un être humain. Clique sur le bouton ci-dessous pour commencer",
       titleContent: "Vérification",
-      headerImage: null,
+      footerImage: null,
       anotherImage: null,
       embedImage: null,
       isEditing: false,
@@ -549,8 +620,8 @@ export default {
       selectedCardBgColor: "#0000000",
       mainCardText: "Wallbot#000 just joined the server",
       mainCardTextColor: "#ffffff",
-      subCardText: "Member #0", 
-      subCardTextColor: "#999999", 
+      subCardText: "Member #0",
+      subCardTextColor: "#999999",
     };
   },
   methods: {
